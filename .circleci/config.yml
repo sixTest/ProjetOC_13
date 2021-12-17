@@ -66,6 +66,6 @@ workflows:
       - build-push-docker:
          filters:
            branches:
-             only: main
+             only: master
          requires:
            - build-and-test
