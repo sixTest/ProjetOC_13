@@ -41,7 +41,7 @@ jobs:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
           command: pytest
-  build-docker:
+  build-push-docker:
     docker:
       - image: cimg/python:3.8
         auth:
@@ -63,4 +63,9 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build-and-test
-      - build-docker
+      - build-push-docker:
+         filters:
+           branches:
+             only: master
+         requires:
+           - build-and-test
