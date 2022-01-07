@@ -68,8 +68,6 @@ jobs:
           set -ex
           sudo curl https://cli-assets.heroku.com/install.sh | sh
           echo $HEROKU_API_KEY | docker login --username=_ --password-stdin registry.heroku.com
-          heroku apps:destroy --app=$HEROKU_APP_NAME --confirm=$HEROKU_APP_NAME
-          heroku apps:create $HEROKU_APP_NAME
           heroku config:set DJANGO_ALLOWED_HOSTS=$HEROKU_APP_NAME.herokuapp.com
           echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
           docker pull $DOCKER_USERNAME/$DOCKER_REPOSITORY:$CIRCLE_SHA1
