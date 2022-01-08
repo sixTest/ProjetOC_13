@@ -1,5 +1,4 @@
 import os
-from django.core.management.utils import get_random_secret_key
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
@@ -10,15 +9,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
+SECRET_KEY = os.getenv('SECRET_KEY', 'txx%!f4ls*3vn2@%qdbezt79s0cuv_jy#5-7u%o2o^#q@4u^^m')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DJANGO_DEBUG', False)
+DEBUG = int(os.getenv('DJANGO_DEBUG', 0))
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-ENV_ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS')
-if ENV_ALLOWED_HOSTS:
-    ALLOWED_HOSTS.extend(ENV_ALLOWED_HOSTS.split(','))
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1').split(',')
 
 # Application definition
 
@@ -108,7 +104,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
