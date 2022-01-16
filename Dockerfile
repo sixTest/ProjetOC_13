@@ -10,4 +10,4 @@ RUN python manage.py collectstatic
 RUN python manage.py makemigrations
 RUN python manage.py migrate
 
-CMD gunicorn oc_lettings_site.wsgi:application --bind 0.0.0.0:$PORT
+CMD gunicorn projet13.wsgi:application --bind 0.0.0.0:$PORT
