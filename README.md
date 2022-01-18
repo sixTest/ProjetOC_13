@@ -1,77 +1,96 @@
-## Résumé
+## Description de l'application
 
-Site web d'Orange County Lettings
+Ce projet consiste à mettre a l'échelle une application django OC Lettings en utilisant
+une architecture modulaire.
 
-## Développement local
+OC Lettings : https://github.com/OpenClassrooms-Student-Center/Python-OC-Lettings-FR
 
-### Prérequis
+Plusieurs points devaient être améliorés :
 
-- Compte GitHub avec accès en lecture à ce repository
-- Git CLI
-- SQLite3 CLI
-- Interpréteur Python, version 3.6 ou supérieure
+- Réduction de diverses dettes techniques sur le projet
+    - Erreurs de linting
+    - Mauvaise pluralisation de la valeur "adresse" sur le site d'administration
+- Refonte de l'architecture modulaire (3 sous applications)
+  
+    - oc_lettings_site (page d'accueil)
+    - lettings
+    - profiles
+    
+- Ajout d'un pipeline CI/CD utilisant CircleCI et Heroku
+  
+    - (1) un travail de compilation et de tests (sur l'ensemble des branches)
+    - (2) un travail de conteneurisation si (1) réussi (uniquement branche master) 
+    - (3) un travail de déploiement si (2) réussi
+- Surveillance de l’application et suivi des erreurs via Sentry
 
-Dans le reste de la documentation sur le développement local, il est supposé que la commande `python` de votre OS shell exécute l'interpréteur Python ci-dessus (à moins qu'un environnement virtuel ne soit activé).
+### Lancement de l'application local
 
-### macOS / Linux
+- Récupérez le projet github
+- Ouvrez un invite de commande
+- Placez-vous dans le répertoire ProjetOC_13
+- Création de l'environnement virtuel : ```python -m venv env```
+- Activation de l'environnement virtuel :
 
-#### Cloner le repository
+    - Pour Windows : ```env\Scripts\activate.bat```
+    - Pour linux : ```env/bin/activate```
+    
+- Installation des dépendances : ```pip install -r requirements.txt```
+- Lancement du serveur local : ```python manage.py runserver```
+- Pour accéder au site : http://127.0.0.1:8000/
+- Pour accéder au site d'administration http://127.0.0.1:8000/admin/
 
-- `cd /path/to/put/project/in`
-- `git clone https://github.com/OpenClassrooms-Student-Center/Python-OC-Lettings-FR.git`
+     - Login : admin
+     - password : Abc1234!
+    
+### Lancement de l'application via la création d'une image docker
 
-#### Créer l'environnement virtuel
+- Installez docker
+- Ouvrez un invite de commande  
+- Placez-vous dans le répertoire ProjetOC_13
+- Construction de l'image : ```docker build -t . <nom de l'image>```
+- Lancement de l'image : ```docker run -dp 8000:8000 --env-file envlocal <nom de l'image>```
+- Vous pouvez modifier le fichier envlocal si vous souhaité une configuration différente
+- Vous pouvez accéder au site de la même manière que précédemment 
 
-- `cd /path/to/Python-OC-Lettings-FR`
-- `python -m venv venv`
-- `apt-get install python3-venv` (Si l'étape précédente comporte des erreurs avec un paquet non trouvé sur Ubuntu)
-- Activer l'environnement `source venv/bin/activate`
-- Confirmer que la commande `python` exécute l'interpréteur Python dans l'environnement virtuel
-`which python`
-- Confirmer que la version de l'interpréteur Python est la version 3.6 ou supérieure `python --version`
-- Confirmer que la commande `pip` exécute l'exécutable pip dans l'environnement virtuel, `which pip`
-- Pour désactiver l'environnement, `deactivate`
+### Lancement de l'application via l'utilisation d'une image sur docker hub
 
-#### Exécuter le site
+- Installez docker et créez un compte docker hub
+- Rendez vous sur le repository : https://hub.docker.com/repository/docker/sixtest/projet_oc_13
+- Copiez le tag de l'image souhaité
+- Ouvrez un invite de commande
+- Si vous souhaitez utiliser la configuration par defaut, assurez-vous que votre répertoire courant contienne
+le fichier envlocal ou créez-en un si vous souhaitez une configuration différente
+- Lancement de l'image : ```docker run -dp 8000:8000 --env-file envlocal sixtest/projet_oc_13:<tag de l'image>```
+- Vous pouvez accéder au site de la même manière que précédemment 
 
-- `cd /path/to/Python-OC-Lettings-FR`
-- `source venv/bin/activate`
-- `pip install --requirement requirements.txt`
-- `python manage.py runserver`
-- Aller sur `http://localhost:8000` dans un navigateur.
-- Confirmer que le site fonctionne et qu'il est possible de naviguer (vous devriez voir plusieurs profils et locations).
+### Lancement des tests et du linting
 
-#### Linting
+- Localement (invite de commande) ou via la CLI docker
+- Pour le linting : ```flake8```
+- Pour les tests : ```pytest```
 
-- `cd /path/to/Python-OC-Lettings-FR`
-- `source venv/bin/activate`
-- `flake8`
+### Lien vers le projet de configuration du pipeline CircleCi
 
-#### Tests unitaires
+https://app.circleci.com/pipelines/github/sixTest/ProjetOC_13
 
-- `cd /path/to/Python-OC-Lettings-FR`
-- `source venv/bin/activate`
-- `pytest`
+![Alt text](images/circleci.png)
 
-#### Base de données
+### Lien vers le déploiement heroku
 
-- `cd /path/to/Python-OC-Lettings-FR`
-- Ouvrir une session shell `sqlite3`
-- Se connecter à la base de données `.open oc-lettings-site.sqlite3`
-- Afficher les tables dans la base de données `.tables`
-- Afficher les colonnes dans le tableau des profils, `pragma table_info(Python-OC-Lettings-FR_profile);`
-- Lancer une requête sur la table des profils, `select user_id, favorite_city from
-  Python-OC-Lettings-FR_profile where favorite_city like 'B%';`
-- `.quit` pour quitter
+- Site : https://oc-lettings-0.herokuapp.com/
 
-#### Panel d'administration
+![Alt text](images/heroku_site.png)
 
-- Aller sur `http://localhost:8000/admin`
-- Connectez-vous avec l'utilisateur `admin`, mot de passe `Abc1234!`
+- Site d'administration : https://oc-lettings-0.herokuapp.com/admin
+     - Login : admin
+     - password : Abc1234!
+  
+![Alt text](images/heroku_admin.png)
 
-### Windows
+### Lien vers le projet Sentry
 
-Utilisation de PowerShell, comme ci-dessus sauf :
+https://sentry.io/organizations/quentinoc/issues/?project=6135968
 
-- Pour activer l'environnement virtuel, `.\venv\Scripts\Activate.ps1` 
-- Remplacer `which <my-command>` par `(Get-Command <my-command>).Path`
+![Alt text](images/sentry.png)
+
+Exemple issue propagé par heroku sur sentry : https://sentry.io/share/issue/b534680a7f4d49d589801f35d981ea4f/
