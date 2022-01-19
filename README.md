@@ -47,7 +47,7 @@ Plusieurs points devaient être améliorés :
 - Installez docker
 - Ouvrez un invite de commande  
 - Placez-vous dans le répertoire ProjetOC_13
-- Construction de l'image : ```docker build -t . <nom de l'image>```
+- Construction de l'image : ```docker build -t <nom de l'image> .```
 - Lancement de l'image : ```docker run -dp 8000:8000 --env-file envlocal <nom de l'image>```
 - Vous pouvez modifier le fichier envlocal si vous souhaité une configuration différente
 - Vous pouvez accéder au site de la même manière que précédemment 
